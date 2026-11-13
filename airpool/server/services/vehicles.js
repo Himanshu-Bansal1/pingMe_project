@@ -1,0 +1,3 @@
+export const BAG_UNITS={none:0,cabin:1,large:2,'2+ large':4};
+export const VEHICLES=[{type:'Sedan',seats:4,bags:4},{type:'SUV',seats:6,bags:8},{type:'Van',seats:8,bags:14}];
+export function recommendVehicle(riders){const people=riders.length,bags=riders.reduce((n,r)=>n+Number(r.luggage_units??BAG_UNITS[r.luggage_type]??0),0);const fit=VEHICLES.find(v=>people<=v.seats&&bags<=v.bags);return fit?{vehicles:[fit.type],reason:people>4||bags>4?`Needs an ${fit.type}: ${people} riders, ${bags} bag units`:`${fit.type} fits ${people} riders and ${bags} bag units`}:{vehicles:['SUV','SUV'],reason:`Split into two cabs: ${people} riders, ${bags} bag units`};}

@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {groupRiders,hasReadyTimeGap} from '../server/services/matching.js';
+test('groups same-zone riders within a 15 minute ready window',()=>{const t='2026-01-01T10:';const x=groupRiders([{zone_id:1,zone_name:'A',ready_time:t+'00:00Z'},{zone_id:1,zone_name:'A',ready_time:t+'10:00Z'},{zone_id:1,zone_name:'A',ready_time:t+'30:00Z'}]);assert.equal(x.length,2);assert.equal(x[0].riders.length,2);});
+test('regroups only when ready-time gap is strictly greater than 15 minutes',()=>{const t='2026-01-01T10:';const make=(m)=>[{ready_time:t+'00:00Z'},{ready_time:t+String(m).padStart(2,'0')+':00Z'}];assert.equal(hasReadyTimeGap(make(15)),false);assert.equal(hasReadyTimeGap(make(16)),true);});

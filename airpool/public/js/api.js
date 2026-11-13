@@ -1,0 +1,2 @@
+export async function api(url,options={}){const response=await fetch(url,{credentials:'same-origin',headers:{'Content-Type':'application/json',...(options.headers||{})},...options});let data;try{data=await response.json()}catch{data={}}if(!response.ok)throw new Error(data?.error?.message||'Something went wrong. Please try again.');return data}
+export const post=(url,body={})=>api(url,{method:'POST',body:JSON.stringify(body)});
