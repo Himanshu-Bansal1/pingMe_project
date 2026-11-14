@@ -1,3 +1,3 @@
 let motionApi;try{motionApi=await import('https://cdn.jsdelivr.net/npm/motion@12.23.12/+esm')}catch{motionApi=null}
 export function enter(nodes){if(!motionApi||matchMedia('(prefers-reduced-motion: reduce)').matches)return;const items=Array.from(nodes);items.forEach((el,i)=>motionApi.animate(el,{opacity:[0,1],transform:['translateY(12px)','translateY(0)']},{duration:.42,delay:i*.045,easing:'ease-out'}))}
-export function count(el,to){if(!motionApi||matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=to;return}const obj={n:0};motionApi.animate(0,to,{duration:1.2,onUpdate:v=>el.textContent=Math.round(v).toLocaleString()})}
+export function count(el,to){const prefix=el.dataset.prefix||'',render=value=>`${prefix}${Math.round(value).toLocaleString()}`;if(!motionApi||matchMedia('(prefers-reduced-motion: reduce)').matches){el.textContent=render(to);return}motionApi.animate(0,to,{duration:1.2,onUpdate:value=>el.textContent=render(value)})}
