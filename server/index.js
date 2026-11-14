@@ -1,8 +1,9 @@
 import 'dotenv/config';
 import express from 'express';import helmet from 'helmet';import rateLimit from 'express-rate-limit';import cookieParser from 'cookie-parser';import bcrypt from 'bcryptjs';import jwt from 'jsonwebtoken';import { randomInt,createHash,timingSafeEqual } from 'node:crypto';import path from 'node:path';import { fileURLToPath } from 'node:url';
-import {db} from './db/db.js';import {groupRiders,hasReadyTimeGap,REGROUP_GAP_MINUTES} from './services/matching.js';import {estimateFare,splitFare} from './services/fare.js';import {recommendVehicle} from './services/vehicles.js';
+import {db} from './db/db.js';import {bootstrapEmptyDatabase} from './db/bootstrap.js';import {groupRiders,hasReadyTimeGap,REGROUP_GAP_MINUTES} from './services/matching.js';import {estimateFare,splitFare} from './services/fare.js';import {recommendVehicle} from './services/vehicles.js';
 import {supabaseEnabled,supaSelect,supaInsert,supaUpsert,supaPatch,supaDelete} from './db/supabase.js';
 const app=express(),here=path.dirname(fileURLToPath(import.meta.url)),PORT=process.env.PORT||3000,SECRET=process.env.JWT_SECRET||'airpool-demo-secret-change-me',ADMIN_EMAIL=process.env.ADMIN_EMAIL||'admin@airpool.demo',pendingOtps=new Map();
+bootstrapEmptyDatabase();
 app.use(helmet({contentSecurityPolicy:false}));app.use(express.json({limit:'32kb'}));app.use(cookieParser());app.use('/api',rateLimit({windowMs:60000,limit:120,standardHeaders:true,legacyHeaders:false}));
 app.use(express.static(path.resolve(here,'../public')));
 const clients=new Set();function emit(type,payload){const row=db.prepare('INSERT INTO events(type,payload_json) VALUES(?,?)').run(type,JSON.stringify(payload));const created_at=new Date().toISOString(),message=JSON.stringify({id:row.lastInsertRowid,type,payload,created_at});for(const res of clients)res.write(`data: ${message}\n\n`);if(supabaseEnabled)supaInsert('airpool_events',{type,payload_json:payload,created_at}).catch(e=>console.error('[Supabase event write]',e.message));}

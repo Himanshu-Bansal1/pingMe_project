@@ -24,7 +24,7 @@ When Supabase is not configured, these features use the local SQLite demo. This 
 
 ## Two-minute demo
 
-1. Open **Live Pools** and scan the seeded Chandigarh and Amritsar groups.
+1. Open **Live Pools** and scan the seeded Chandigarh and Amritsar groups. A fresh server database is seeded on startup; existing databases are left untouched.
 2. Pick a traveller, choose a delay, and press **Delay**. If the updated ready-time gap between pool members exceeds 15 minutes, matching runs again and the Regroup Log shows the change. At 15 minutes or less, the pool stays together and its departure time updates.
 3. Press **Add random traveller** to inject another simulated traveller; the SSE feed updates the active screen.
 4. Open **Find a Pool**, submit a sample flight to a seeded zone, then return to Live Pools.
