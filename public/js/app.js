@@ -17,7 +17,7 @@ function applyTheme(theme){
     :'<path d="M20.5 14.3A8.6 8.6 0 0 1 9.7 3.5 8.7 8.7 0 1 0 20.5 14.3Z"/>';
 }
 function initTheme(){
-  let theme=document.documentElement.dataset.theme==='dark'?'dark':'light';
+  let theme=document.documentElement.dataset.theme==='light'?'light':'dark';
   applyTheme(theme);
   document.querySelector('#theme-toggle')?.addEventListener('click',()=>{
     theme=theme==='dark'?'light':'dark';
